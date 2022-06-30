@@ -1,4 +1,6 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { hello } from "@olympus/cerberus";
+
 import Root from "./root.component";
 
 describe("Root component", () => {
@@ -11,5 +13,17 @@ describe("Root component", () => {
 
     expect(title).toBeInTheDocument();
     expect(title).toHaveAttribute("href", "/");
+  });
+
+  it("clicking the button calls hello", () => {
+    render(<Root {...props} />);
+
+    const button = document.querySelector("button");
+
+    expect(button).toBeInTheDocument();
+
+    fireEvent.click(button);
+
+    expect(hello).toHaveBeenCalled();
   });
 });

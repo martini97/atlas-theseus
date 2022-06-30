@@ -42,3 +42,7 @@ declare module "*.css" {
   const content: Record<string, string>;
   export default content;
 }
+
+declare module "@olympus/cerberus" {
+  export const hello: (name: string) => void;
+}
