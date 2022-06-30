@@ -21,6 +21,9 @@ module.exports = (webpackConfigEnv, argv) => {
     argv,
   });
 
+  const webSocketHost = process.env.WEBPACK_WEBSOCKET_HOST || "localhost";
+  const webSocketPort = process.env.WEBPACK_WEBSOCKET_PORT || undefined;
+  const webSocketProtocol = process.env.WEBPACK_WEBSOCKET_PROTOCOL || "ws";
 
   const config = mergeRulesWithMatchingTest(defaultConfig, {
     module: {
@@ -29,10 +32,25 @@ module.exports = (webpackConfigEnv, argv) => {
           test: /\.css$/i,
           use: [
             { loader: require.resolve("style-loader") },
-            { loader: require.resolve("css-loader"), options: { modules: true } },
+            {
+              loader: require.resolve("css-loader"),
+              options: { modules: true },
+            },
           ],
         },
       ],
+    },
+    devServer: {
+      ...defaultConfig.devServer,
+      open: false,
+      hot: true,
+      client: {
+        webSocketURL: {
+          hostname: webSocketHost,
+          port: webSocketPort,
+          protocol: webSocketProtocol,
+        },
+      },
     },
   });
 
